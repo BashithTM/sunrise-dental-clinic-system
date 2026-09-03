@@ -1,0 +1,3 @@
+package com.sunrise.dentalclinic.controller;
+import com.sunrise.dentalclinic.service.BillingService;import org.springframework.stereotype.Controller;import org.springframework.ui.Model;import org.springframework.web.bind.annotation.*;
+@Controller @RequestMapping("/bills") public class BillingController{private final BillingService service;public BillingController(BillingService s){service=s;}@GetMapping("/new")String form(){return "bills/form";}@PostMapping String generate(@RequestParam String appointmentNumber){return "redirect:/bills/"+service.generate(appointmentNumber.trim()).getId();}@GetMapping("/{id}")String receipt(@PathVariable Long id,Model m){m.addAttribute("bill",service.get(id));return "bills/receipt";}}

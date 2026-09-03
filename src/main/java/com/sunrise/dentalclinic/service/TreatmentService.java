@@ -1,0 +1,7 @@
+package com.sunrise.dentalclinic.service;
+import com.sunrise.dentalclinic.dto.TreatmentRequest; import com.sunrise.dentalclinic.exception.ResourceNotFoundException; import com.sunrise.dentalclinic.model.Treatment; import com.sunrise.dentalclinic.repository.TreatmentRepository; import org.springframework.stereotype.Service; import org.springframework.transaction.annotation.Transactional; import java.util.*;
+@Service public class TreatmentService { private final TreatmentRepository repo; public TreatmentService(TreatmentRepository r){repo=r;}
+ @Transactional(readOnly=true) public List<Treatment> all(){return repo.findAllByOrderByTreatmentName();} @Transactional(readOnly=true) public List<Treatment> active(){return repo.findByActiveTrueOrderByTreatmentName();}
+ @Transactional(readOnly=true) public Treatment get(Long id){return repo.findById(id).orElseThrow(()->new ResourceNotFoundException("Treatment not found"));}
+ @Transactional public Treatment create(TreatmentRequest r){return repo.save(map(new Treatment(),r));} @Transactional public Treatment update(Long id,TreatmentRequest r){return repo.save(map(get(id),r));}
+ @Transactional public Treatment toggle(Long id){var t=get(id);t.setActive(!t.isActive());return repo.save(t);} private Treatment map(Treatment t,TreatmentRequest r){t.setTreatmentName(r.treatmentName().trim());t.setTreatmentCost(r.treatmentCost().setScale(2));return t;}}
