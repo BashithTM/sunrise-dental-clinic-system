@@ -1,0 +1,38 @@
+# Compiled Java files
+*.class
+
+# Maven
+target/
+.mvn/timing.properties
+
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Visual Studio Code
+.vscode/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Environment and secrets
+.env
+.env.*
+application-local.properties
+application-local.yml
+
+# Logs
+*.log
+logs/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+

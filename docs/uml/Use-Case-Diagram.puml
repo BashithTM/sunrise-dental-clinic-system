@@ -1,0 +1,67 @@
+@startuml
+!theme plain
+
+left to right direction
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype ortho
+skinparam dpi 150
+
+skinparam actor {
+    BorderColor #1E3A8A
+    FontColor #111827
+}
+
+skinparam usecase {
+    BackgroundColor #EFF6FF
+    BorderColor #2563EB
+    FontColor #111827
+    ArrowColor #475569
+}
+
+skinparam rectangle {
+    BorderColor #1E3A8A
+    FontColor #111827
+}
+
+actor "Clinic Staff" as Staff
+
+rectangle "Sunrise Dental Clinic Management System" {
+
+    usecase "Login" as Login
+    usecase "Register\nAppointment" as Register
+    usecase "Search\nAppointment" as Search
+    usecase "Generate Bill" as Bill
+    usecase "View Help" as Help
+    usecase "Logout" as Logout
+
+    usecase "Validate Appointment\nDetails" as Validate
+    usecase "Display Appointment\nDetails" as Display
+    usecase "Calculate Total" as Calculate
+    usecase "Print Receipt" as Print
+
+    Login -[hidden]down-> Register
+    Register -[hidden]down-> Search
+    Search -[hidden]down-> Bill
+    Bill -[hidden]down-> Help
+    Help -[hidden]down-> Logout
+
+    Validate -[hidden]down-> Display
+    Display -[hidden]down-> Calculate
+    Calculate -[hidden]down-> Print
+}
+
+Staff --> Login
+Staff --> Register
+Staff --> Search
+Staff --> Bill
+Staff --> Help
+Staff --> Logout
+
+Register ..> Validate : <<include>>
+Search ..> Display : <<include>>
+Bill ..> Calculate : <<include>>
+Print ..> Bill : <<extend>>
+
+@enduml

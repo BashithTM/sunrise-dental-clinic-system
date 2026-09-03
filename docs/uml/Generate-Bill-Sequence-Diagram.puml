@@ -1,0 +1,63 @@
+@startuml
+!theme plain
+
+title Generate Bill Sequence Diagram
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 10
+skinparam dpi 150
+
+autonumber
+
+actor "Clinic Staff" as Staff
+boundary "Billing Page" as Page
+control "Billing Controller" as Controller
+control "Billing Service" as Service
+entity "Appointment Repository" as AppointmentRepository
+entity "Bill Repository" as BillRepository
+database "MySQL Database" as Database
+
+Staff -> Page : Enter appointment number
+Staff -> Page : Click Generate Bill
+
+Page -> Controller : generateBill(appointmentNumber)
+Controller -> Service : createBill(appointmentNumber)
+
+Service -> AppointmentRepository : findByAppointmentNumber(appointmentNumber)
+AppointmentRepository -> Database : Query appointment, patient and treatment
+Database --> AppointmentRepository : Appointment details or no record
+AppointmentRepository --> Service : Appointment object or null
+
+alt Appointment not found
+
+    Service --> Controller : Appointment not found
+    Controller --> Page : Return error message
+    Page --> Staff : Display appointment not found
+
+else Appointment found
+
+    Service -> Service : Read treatment cost
+    Service -> Service : Add consultation fee
+    Service -> Service : Calculate total amount
+
+    Service -> BillRepository : saveBill(bill)
+    BillRepository -> Database : Insert bill record
+    Database --> BillRepository : Bill saved
+    BillRepository --> Service : Saved bill
+
+    Service -> Service : Generate receipt
+    Service --> Controller : Bill and receipt details
+    Controller --> Page : Return generated bill
+    Page --> Staff : Display bill and total amount
+
+    opt Staff chooses to print receipt
+
+        Staff -> Page : Click Print Receipt
+        Page --> Staff : Display printable receipt
+
+    end
+end
+
+@enduml

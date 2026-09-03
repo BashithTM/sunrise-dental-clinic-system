@@ -1,0 +1,68 @@
+@startuml
+!theme plain
+
+title Register Appointment Sequence Diagram
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 10
+skinparam dpi 150
+
+autonumber
+
+actor "Clinic Staff" as Staff
+boundary "Appointment Page" as Page
+control "Appointment Controller" as Controller
+control "Appointment Service" as Service
+entity "Patient Repository" as PatientRepository
+entity "Appointment Repository" as AppointmentRepository
+database "MySQL Database" as Database
+
+Staff -> Page : Enter patient and appointment details
+Staff -> Page : Click Save Appointment
+
+Page -> Controller : submitAppointment(details)
+Controller -> Controller : validateInput(details)
+
+alt Invalid appointment details
+
+    Controller --> Page : Return validation errors
+    Page --> Staff : Display validation messages
+
+else Valid appointment details
+
+    Controller -> Service : registerAppointment(details)
+
+    Service -> AppointmentRepository : checkDentistAvailability(dentist, date, time)
+    AppointmentRepository -> Database : Search existing appointment
+    Database --> AppointmentRepository : Booking exists or not
+    AppointmentRepository --> Service : Availability result
+
+    alt Dentist or time slot unavailable
+
+        Service --> Controller : Appointment slot unavailable
+        Controller --> Page : Return availability error
+        Page --> Staff : Display slot unavailable message
+
+    else Dentist and time slot available
+
+        Service -> PatientRepository : findOrCreatePatient(patientDetails)
+        PatientRepository -> Database : Select or insert patient
+        Database --> PatientRepository : Patient record
+        PatientRepository --> Service : Patient object
+
+        Service -> Service : Generate appointment number
+        Service -> AppointmentRepository : saveAppointment(appointment)
+        AppointmentRepository -> Database : Insert appointment record
+        Database --> AppointmentRepository : Appointment saved
+        AppointmentRepository --> Service : Saved appointment
+
+        Service --> Controller : Registration successful
+        Controller --> Page : Return appointment confirmation
+        Page --> Staff : Display appointment number
+
+    end
+end
+
+@enduml

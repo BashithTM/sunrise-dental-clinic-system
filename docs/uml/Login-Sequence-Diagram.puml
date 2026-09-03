@@ -1,0 +1,47 @@
+@startuml
+!theme plain
+
+title Login Sequence Diagram
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 10
+skinparam dpi 150
+
+autonumber
+
+actor "Clinic Staff" as Staff
+boundary "Login Page" as LoginPage
+control "Authentication Controller" as AuthController
+control "Authentication Service" as AuthService
+entity "User Repository" as UserRepository
+database "MySQL Database" as Database
+
+Staff -> LoginPage : Enter username and password
+Staff -> LoginPage : Click Login button
+
+LoginPage -> AuthController : submitLogin(username, password)
+AuthController -> AuthService : authenticate(username, password)
+
+AuthService -> UserRepository : findByUsername(username)
+UserRepository -> Database : Query user by username
+Database --> UserRepository : User record or no record
+UserRepository --> AuthService : User object or null
+
+alt Valid username and password
+
+    AuthService -> AuthService : Verify encrypted password
+    AuthService --> AuthController : Authentication successful
+    AuthController --> LoginPage : Create session and redirect
+    LoginPage --> Staff : Display dashboard
+
+else Invalid username or password
+
+    AuthService --> AuthController : Authentication failed
+    AuthController --> LoginPage : Return error message
+    LoginPage --> Staff : Display invalid credentials message
+
+end
+
+@enduml

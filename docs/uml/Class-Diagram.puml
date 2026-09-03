@@ -1,0 +1,85 @@
+@startuml
+!theme plain
+
+top to bottom direction
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+skinparam dpi 150
+
+skinparam class {
+    BackgroundColor #EFF6FF
+    BorderColor #2563EB
+    FontColor #111827
+    ArrowColor #475569
+}
+
+class User {
+    - userId : Long
+    - username : String
+    - passwordHash : String
+    - role : String
+    + login(password : String) : boolean
+    + logout() : void
+}
+
+class Patient {
+    - patientId : Long
+    - name : String
+    - address : String
+    - contactNumber : String
+    + updateDetails() : void
+    + getAppointments() : List
+}
+
+class Dentist {
+    - dentistId : Long
+    - name : String
+    - specialization : String
+    + checkAvailability(date : LocalDate, time : LocalTime) : boolean
+}
+
+class Treatment {
+    - treatmentId : Long
+    - treatmentName : String
+    - treatmentCost : BigDecimal
+    + updateCost(cost : BigDecimal) : void
+}
+
+class Appointment {
+    - appointmentId : Long
+    - appointmentNumber : String
+    - appointmentDate : LocalDate
+    - appointmentTime : LocalTime
+    - status : AppointmentStatus
+    + schedule() : void
+    + reschedule(date : LocalDate, time : LocalTime) : void
+    + cancel() : void
+}
+
+class Bill {
+    - billId : Long
+    - consultationFee : BigDecimal
+    - treatmentCost : BigDecimal
+    - totalAmount : BigDecimal
+    + calculateTotal() : BigDecimal
+    + generateReceipt() : String
+}
+
+enum AppointmentStatus {
+    SCHEDULED
+    COMPLETED
+    CANCELLED
+}
+
+Patient "1" o-- "0..*" Appointment : has
+Appointment "0..*" --> "1" Dentist : assigned to
+Appointment "0..*" --> "1" Treatment : includes
+Appointment "1" *-- "0..1" Bill : generates
+Appointment --> AppointmentStatus
+User ..> Appointment : manages
+User ..> Bill : generates
+
+@enduml
