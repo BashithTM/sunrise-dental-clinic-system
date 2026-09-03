@@ -1,0 +1,7 @@
+package com.sunrise.dentalclinic.config;
+import com.sunrise.dentalclinic.repository.UserRepository; import org.springframework.context.annotation.*; import org.springframework.security.config.annotation.web.builders.HttpSecurity; import org.springframework.security.core.userdetails.*; import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; import org.springframework.security.crypto.password.PasswordEncoder; import org.springframework.security.web.SecurityFilterChain;
+@Configuration public class SecurityConfig {
+ @Bean PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}
+ @Bean UserDetailsService users(UserRepository repo){return username->{var u=repo.findByUsernameIgnoreCase(username).orElseThrow(()->new UsernameNotFoundException("Invalid username or password"));return User.withUsername(u.getUsername()).password(u.getPasswordHash()).roles(u.getRole().name()).disabled(!u.isEnabled()).build();};}
+ @Bean SecurityFilterChain security(HttpSecurity http)throws Exception{return http.authorizeHttpRequests(a->a.requestMatchers("/login","/css/**","/error").permitAll().requestMatchers("/admin/**").hasRole("ADMIN").anyRequest().authenticated()).formLogin(f->f.loginPage("/login").defaultSuccessUrl("/dashboard",true).failureUrl("/login?error")).logout(l->l.logoutSuccessUrl("/login?logout").invalidateHttpSession(true).deleteCookies("JSESSIONID")).exceptionHandling(e->e.accessDeniedPage("/access-denied")).build();}
+}
