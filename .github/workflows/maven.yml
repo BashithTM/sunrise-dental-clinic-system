@@ -1,0 +1,16 @@
+name: Maven CI
+on: [push, pull_request]
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Test with H2
+        run: ./mvnw -B -Dspring.profiles.active=test test
+      - name: Build application
+        run: ./mvnw -B -Dspring.profiles.active=test -DskipTests package

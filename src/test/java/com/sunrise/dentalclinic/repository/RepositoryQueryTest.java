@@ -1,0 +1,5 @@
+package com.sunrise.dentalclinic.repository;
+import com.sunrise.dentalclinic.model.*;import org.junit.jupiter.api.Test;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;import org.springframework.test.context.ActiveProfiles;import java.time.*;import static org.junit.jupiter.api.Assertions.*;
+@DataJpaTest @ActiveProfiles("test") class RepositoryQueryTest{@Autowired PatientRepository patients;@Autowired AppointmentRepository appointments;
+ @Test void patientSearchMatchesNameOrContact(){var p=new Patient();p.setName("Nimal Perera");p.setAddress("Colombo");p.setContactNumber("0771234567");patients.save(p);assertEquals(1,patients.findByNameContainingIgnoreCaseOrContactNumberContainingIgnoreCaseOrderByName("nimal","nimal").size());assertEquals(1,patients.findByNameContainingIgnoreCaseOrContactNumberContainingIgnoreCaseOrderByName("077","077").size());}
+ @Test void dateQueryReturnsNoRowsForEmptyDatabase(){assertTrue(appointments.findByAppointmentDateOrderByAppointmentTime(LocalDate.now()).isEmpty());}}
