@@ -1,0 +1,3 @@
+package com.sunrise.dentalclinic.dto;
+import com.sunrise.dentalclinic.model.*;import java.time.*;
+public record PatientAppointmentHistory(Long id,String appointmentNumber,String dentistName,String treatmentName,LocalDate appointmentDate,LocalTime appointmentTime,AppointmentStatus status,Long billId){public static PatientAppointmentHistory from(Appointment a,Long billId){return new PatientAppointmentHistory(a.getId(),a.getAppointmentNumber(),a.getDentist().getName(),a.getTreatment().getTreatmentName(),a.getAppointmentDate(),a.getAppointmentTime(),a.getStatus(),billId);}public boolean billed(){return billId!=null;}}
