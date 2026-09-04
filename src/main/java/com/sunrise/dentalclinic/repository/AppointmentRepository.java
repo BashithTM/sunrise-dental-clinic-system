@@ -11,6 +11,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long>{
  @EntityGraph(attributePaths={"patient","dentist","treatment"}) List<Appointment> findByAppointmentDateGreaterThanEqualOrderByAppointmentDateAscAppointmentTimeAsc(LocalDate date);
  long countByPatientId(Long patientId);
  boolean existsByPatientId(Long patientId);
+ boolean existsByDentistId(Long dentistId);
  @EntityGraph(attributePaths={"patient","dentist","treatment"}) List<Appointment> findByPatientIdOrderByAppointmentDateDescAppointmentTimeDesc(Long patientId);
  @Query("select a from Appointment a where a.appointmentDate between :from and :to and (:dentistId is null or a.dentist.id=:dentistId) and (:status is null or a.status=:status) order by a.appointmentDate,a.appointmentTime")
  @EntityGraph(attributePaths={"patient","dentist","treatment"}) List<Appointment> report(@Param("from") LocalDate from,@Param("to") LocalDate to,@Param("dentistId") Long dentistId,@Param("status") AppointmentStatus status);

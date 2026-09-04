@@ -1,1 +1,37 @@
-<!doctype html><html xmlns:th="http://www.thymeleaf.org"><head><title>Dentists</title><link rel="stylesheet" th:href="@{/css/app.css}"></head><body><header th:replace="~{fragments/nav :: nav}"></header><main><h1>Dentists</h1><a class="button" th:href="@{/dentists/new}">Add dentist</a><div class="table-wrap"><table><thead><tr><th>Name</th><th>Specialization</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr th:each="d:${dentists}"><td th:text="${d.name}"></td><td th:text="${d.specialization}"></td><td th:text="${d.active?'Active':'Inactive'}"></td><td class="actions"><a class="button secondary" th:href="@{/dentists/{id}/edit(id=${d.id})}">Edit</a><form th:action="@{/dentists/{id}/toggle(id=${d.id})}" method="post"><button th:text="${d.active?'Deactivate':'Activate'}"></button></form></td></tr></tbody></table></div></main></body></html>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dentists</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments/nav :: nav}"></header>
+<main>
+    <h1>Dentists</h1>
+    <a class="button" th:href="@{/dentists/new}">Add dentist</a>
+    <p class="alert" th:if="${success}" th:text="${success}"></p>
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Name</th><th>Specialization</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+            <tr th:each="d:${dentists}">
+                <td th:text="${d.name}"></td>
+                <td th:text="${d.specialization}"></td>
+                <td th:text="${d.active?'Active':'Inactive'}"></td>
+                <td>
+                    <div class="actions">
+                        <a class="button secondary" th:href="@{/dentists/{id}/edit(id=${d.id})}">Edit</a>
+                        <form th:action="@{/dentists/{id}/toggle(id=${d.id})}" method="post"><button th:text="${d.active?'Deactivate':'Activate'}"></button></form>
+                        <form th:action="@{/dentists/{id}/delete(id=${d.id})}" method="post" onsubmit="return confirm('Delete this dentist? This action cannot be undone.');">
+                            <button class="danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
