@@ -1,1 +1,30 @@
-<!doctype html><html xmlns:th="http://www.thymeleaf.org"><body><header th:fragment="nav" class="topbar"><link rel="stylesheet" th:href="@{/css/shell.css}"><link rel="stylesheet" th:href="@{/css/patients.css}"><a class="brand" th:href="@{/dashboard}" aria-label="Sunrise Dental Clinic dashboard"><span class="brand-mark" aria-hidden="true">✦</span><span class="brand-name">Sunrise<br><small>Dental Clinic</small></span></a><nav aria-label="Main navigation"><a th:href="@{/dashboard}" title="Dashboard"><span class="nav-icon">⌂</span><span>Dashboard</span></a><a th:href="@{/patients}" title="Patients"><span class="nav-icon">♙</span><span>Patients</span></a><a th:href="@{/dentists}" title="Dentists"><span class="nav-icon">✚</span><span>Dentists</span></a><a th:href="@{/treatments}" title="Treatments"><span class="nav-icon">◇</span><span>Treatments</span></a><a th:href="@{/appointments}" title="Appointments"><span class="nav-icon">▣</span><span>Appointments</span></a><a th:href="@{/bills/new}" title="Billing"><span class="nav-icon">＄</span><span>Billing</span></a><a th:href="@{/reports}" title="Reports"><span class="nav-icon">▥</span><span>Reports</span></a><a th:href="@{/help}" title="Help"><span class="nav-icon">?</span><span>Help</span></a><form th:action="@{/logout}" method="post"><button class="link" title="Logout"><span class="nav-icon">↪</span><span>Logout</span></button></form></nav></header></body></html>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="nav" class="topbar">
+    <link rel="stylesheet" th:href="@{/css/shell.css}">
+    <link rel="stylesheet" th:href="@{/css/patients.css}">
+    <link rel="stylesheet" th:href="@{/css/logo.css}">
+    <script defer th:src="@{/js/navigation.js}"></script>
+    <a class="brand" th:href="@{/dashboard}" aria-label="Sunrise Dental Clinic dashboard">
+        <span class="brand-mark" aria-hidden="true">
+            <img th:src="@{/images/sunrise-dental-logo.png}" alt="">
+        </span>
+        <span class="brand-name">Sunrise<br><small>Dental Clinic</small></span>
+    </a>
+    <nav aria-label="Main navigation">
+        <a th:href="@{/dashboard}" data-nav-path="/dashboard" title="Dashboard"><svg class="nav-icon" aria-hidden="true"><use th:href="@{/images/module-icons.svg#dashboard}"></use></svg><span>Dashboard</span></a>
+        <a th:href="@{/patients}" data-nav-path="/patients" title="Patients"><svg class="nav-icon" aria-hidden="true"><use th:href="@{/images/module-icons.svg#patients}"></use></svg><span>Patients</span></a>
+        <a th:href="@{/dentists}" data-nav-path="/dentists" title="Dentists"><svg class="nav-icon" aria-hidden="true"><use th:href="@{/images/module-icons.svg#dentists}"></use></svg><span>Dentists</span></a>
+        <a th:href="@{/treatments}" data-nav-path="/treatments" title="Treatments"><svg class="nav-icon" aria-hidden="true"><use th:href="@{/images/module-icons.svg#treatments}"></use></svg><span>Treatments</span></a>
+        <a th:href="@{/appointments}" data-nav-path="/appointments" title="Appointments"><svg class="nav-icon" aria-hidden="true"><use th:href="@{/images/module-icons.svg#appointments}"></use></svg><span>Appointments</span></a>
+        <a th:href="@{/bills/new}" data-nav-path="/bills" title="Billing"><svg class="nav-icon" aria-hidden="true"><use th:href="@{/images/module-icons.svg#billing}"></use></svg><span>Billing</span></a>
+        <a th:href="@{/reports}" data-nav-path="/reports" title="Reports"><svg class="nav-icon" aria-hidden="true"><use th:href="@{/images/module-icons.svg#reports}"></use></svg><span>Reports</span></a>
+        <a th:href="@{/help}" data-nav-path="/help" title="Help"><svg class="nav-icon" aria-hidden="true"><use th:href="@{/images/module-icons.svg#help}"></use></svg><span>Help</span></a>
+        <form th:action="@{/logout}" method="post">
+            <button class="link" title="Logout"><svg class="nav-icon" aria-hidden="true"><use th:href="@{/images/module-icons.svg#logout}"></use></svg><span>Logout</span></button>
+        </form>
+    </nav>
+</header>
+</body>
+</html>
